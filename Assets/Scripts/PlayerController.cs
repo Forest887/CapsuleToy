@@ -7,18 +7,19 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Animator anim;
 
-    [SerializeField] int speed = 3;
-    int defaultSpeed;
-    int runSpeed = 1;
+    [SerializeField] float speed = 3;
+    float defaultSpeed;
     [SerializeField] int turnSpeed = 3;
 
+    [SerializeField] GameObject capsule = null;
+    GameObject throwPoint = null;
 
-    bool run = false;
 
     float x = 0;
     float z = 0;
     void Start()
     {
+        throwPoint = GameObject.Find("ThrowPoint");
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         defaultSpeed = speed;
@@ -35,20 +36,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Run"))
         {
-            speed *= 3;
+            speed *= 2;
         }
         if (Input.GetButtonUp("Run"))
         {
             speed = defaultSpeed;
         }
-        //if (Input.GetButton("Run"))
-        //{
-        //    runSpeed = 3;
-        //}
-        //else
-        //{
-        //    runSpeed = 1;
-        //}
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            ThrowACapsule();
+        }
     }
 
     private void FixedUpdate()
@@ -70,10 +68,18 @@ public class PlayerController : MonoBehaviour
             //Slerpで滑らかに回転させる
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, Time.deltaTime * turnSpeed);
             //入力方向に移動する
-            Vector3 velo = dir.normalized * speed * runSpeed;
+            Vector3 velo = dir.normalized * speed;
             velo.y = rb.velocity.y;
             rb.velocity = velo;
         }
 
+    }
+
+    void ThrowACapsule()
+    {
+        //生成
+        GameObject ball = Instantiate(capsule, throwPoint.transform.position, Quaternion.identity);
+        Rigidbody ballRb = ball.GetComponent<Rigidbody>();
+        ballRb.AddForce(this.transform.forward * 5, ForceMode.Impulse);
     }
 }
