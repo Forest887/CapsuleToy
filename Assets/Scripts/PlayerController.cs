@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject capsule = null;
     GameObject throwPoint = null;
 
-    bool hide = false;
+    public bool hide = false;
 
     bool isThrow = false;
     DateTime reloadTime;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     // 前回ボタンが押された時点と現在時間との差分を格納
     TimeSpan pastTime;
 
+    public Vector3 velo = Vector3.zero;
     float x = 0;
     float z = 0;
     void Start()
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
-        Vector3 velo = rb.velocity;
+        velo = rb.velocity;
         anim.SetFloat("Run", velo.magnitude);
 
         if (Input.GetButtonDown("Run"))
@@ -121,24 +122,28 @@ public class PlayerController : MonoBehaviour
 
     void Hide()
     {
-        // Materialを変えるときは一度レンダラーだけを取り出してから変える
-        Renderer renderer = player.GetComponent<Renderer>();
-        // Materialが複数の時は一度配列で取得して、配列としてセットし直す
-        Material[] materials = renderer.materials;
-        if (hide)
+        // 走っているときは隠れることができない
+        if (velo.magnitude <= 1.6f)
         {
-            Debug.Log("default");
-            hide = false;
-            materials[0] = defaultMaterial[0];
-            materials[1] = defaultMaterial[1];
+            // Materialを変えるときは一度レンダラーだけを取り出してから変える
+            Renderer renderer = player.GetComponent<Renderer>();
+            // Materialが複数の時は一度配列で取得して、配列としてセットし直す
+            Material[] materials = renderer.materials;
+            if (hide)
+            {
+                Debug.Log("default");
+                hide = false;
+                materials[0] = defaultMaterial[0];
+                materials[1] = defaultMaterial[1];
+            }
+            else
+            {
+                Debug.Log("hide");
+                hide = true;
+                materials[0] = hideMaterial[0];
+                materials[1] = hideMaterial[1];
+            }
+            renderer.materials = materials;
         }
-        else
-        {
-            Debug.Log("hide");
-            hide = true;
-            materials[0] = hideMaterial[0];
-            materials[1] = hideMaterial[1];
-        }
-        renderer.materials = materials;
     }
 }

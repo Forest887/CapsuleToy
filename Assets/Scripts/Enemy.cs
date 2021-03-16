@@ -5,7 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] float speed = 2.5f;
-    [SerializeField] GameObject player = null;
+
+    GameObject player = null;
+
+    [SerializeField] GameObject searchArea = null;
+    [SerializeField] float searchAngle = 130f;
 
     Rigidbody rb;
 
@@ -34,6 +38,39 @@ public class Enemy : MonoBehaviour
             transform.forward = direction;
 
             rb.velocity = direction * speed;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        //https://gametukurikata.com/program/onlyforwardsearch
+        if (other.tag =="Player")
+        {
+            PlayerController controller = other.gameObject.GetComponent<PlayerController>();
+            if (controller.hide)
+            {
+                //　主人公の方向
+                var playerDireciton = other.transform.position - this.transform.position;
+                //　敵の前方からの主人公の方向
+                var angle = Vector3.Angle(transform.forward, playerDireciton);
+                //　サーチする角度内だったら発見
+                if (angle <= searchAngle)
+                {
+                    player = other.gameObject;
+                }
+            }
+            else if(controller.velo != Vector3.zero)
+            {
+                player = other.gameObject;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            player = null;
         }
     }
 }
