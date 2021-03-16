@@ -31,7 +31,11 @@ public class Partner : MonoBehaviour
         Vector3 direction = heading / dist;
         transform.forward = direction;
 
-        if (dist > 2)
+        if (dist > 6)
+        {
+
+        }
+        else if (dist > 2)
         {
             rb.velocity = direction * speed;
         }

@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
     Animator anim;
+    [SerializeField] GameObject player = null;
+    [SerializeField] Material[] defaultMaterial = null;
+    [SerializeField] Material[] hideMaterial = null;
 
     [SerializeField] float speed = 3;
     float defaultSpeed;
@@ -16,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject capsule = null;
     GameObject throwPoint = null;
 
+    bool hide = false;
 
     bool isThrow = false;
     DateTime reloadTime;
@@ -31,7 +35,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         defaultSpeed = speed;
-
     }
 
 
@@ -46,6 +49,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Run"))
         {
             speed *= 2;
+            if (hide)
+            {
+                Hide();
+            }
         }
         if (Input.GetButtonUp("Run"))
         {
@@ -55,6 +62,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             ThrowACapsule();
+        }
+
+        if (Input.GetButtonDown("Hide"))
+        {
+            Hide();
         }
     }
 
@@ -105,5 +117,28 @@ public class PlayerController : MonoBehaviour
         GameObject ball = Instantiate(capsule, throwPoint.transform.position, Quaternion.identity);
         Rigidbody ballRb = ball.GetComponent<Rigidbody>();
         ballRb.AddForce(this.transform.forward * throwPower, ForceMode.Impulse);
+    }
+
+    void Hide()
+    {
+        // Materialを変えるときは一度レンダラーだけを取り出してから変える
+        Renderer renderer = player.GetComponent<Renderer>();
+        // Materialが複数の時は一度配列で取得して、配列としてセットし直す
+        Material[] materials = renderer.materials;
+        if (hide)
+        {
+            Debug.Log("default");
+            hide = false;
+            materials[0] = defaultMaterial[0];
+            materials[1] = defaultMaterial[1];
+        }
+        else
+        {
+            Debug.Log("hide");
+            hide = true;
+            materials[0] = hideMaterial[0];
+            materials[1] = hideMaterial[1];
+        }
+        renderer.materials = materials;
     }
 }
