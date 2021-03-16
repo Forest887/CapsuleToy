@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// https://unity-shoshinsha.biz/archives/574 参照
 public class AxisCamera : MonoBehaviour
 {//X軸の角度を制限するための変数
     float angleUp = 60f;
