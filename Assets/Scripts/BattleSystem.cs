@@ -36,21 +36,24 @@ public class BattleSystem : MonoBehaviour
         // 順番決め
             case Turn.Ordering:
                 // 速さで順番を決める
+                // if (player.speed > enemy.speed)
+                // { playerFast = true; }
+                // else
+                // { playerFast = fale; }
+
+                if (playerFast)
+                { turnType = Turn.ActionTurn; }
+                else
+                { turnType = Turn.EnemyActionTurn; }
                 break;
         // 行動する
             case Turn.ActionTurn:
+                // 動かすAnimationでChack()を呼び出す
                 // Player.Action();
-                if (playerFast)
-                {
-                    turnType = Turn.EnemyActionTurn;
-                }
                 break;
             case Turn.EnemyActionTurn:
+                // 動かすAnimationでChack()を呼び出す
                 // Enemy.Action();
-                if (!playerFast)
-                {
-                    turnType = Turn.ActionTurn;
-                }
                 break;
         // その他
             case Turn.Other:
@@ -64,5 +67,24 @@ public class BattleSystem : MonoBehaviour
     public void AttackPlan(int num)
     {
         attackNum = num;
+    }
+
+    public void Chack(int actionChara)
+    {
+        // 呼び出し元が自キャラの時
+        if (actionChara == 0)
+        {
+            if (playerFast)
+                turnType = Turn.EnemyActionTurn;
+            else
+                turnType = Turn.PlanTurn;
+        }
+        else
+        {
+            if (!playerFast)
+                turnType = Turn.ActionTurn;
+            else
+                turnType = Turn.PlanTurn;
+        }
     }
 }
