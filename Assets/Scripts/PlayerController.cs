@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int throwPower = 8;
 
     [SerializeField] GameObject capsule = null;
-    GameObject throwPoint = null;
+    [SerializeField] GameObject throwPoint = null;
 
     public bool hide = false;
 
@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
     float z = 0;
     void Start()
     {
-        throwPoint = GameObject.Find("ThrowPoint");
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         defaultSpeed = speed;
@@ -69,6 +68,7 @@ public class PlayerController : MonoBehaviour
         {
             Hide();
         }
+
     }
 
     private void FixedUpdate()
@@ -104,7 +104,9 @@ public class PlayerController : MonoBehaviour
                 isThrow = false;
             }
         }
+
     }
+
 
     void ThrowACapsule()
     {
@@ -117,7 +119,7 @@ public class PlayerController : MonoBehaviour
         // 生成
         GameObject ball = Instantiate(capsule, throwPoint.transform.position, Quaternion.identity);
         Rigidbody ballRb = ball.GetComponent<Rigidbody>();
-        ballRb.AddForce(this.transform.forward * throwPower, ForceMode.Impulse);
+        ballRb.AddForce(transform.forward * throwPower, ForceMode.Impulse);
     }
 
     void Hide()
