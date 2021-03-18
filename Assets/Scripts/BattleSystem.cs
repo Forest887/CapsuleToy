@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+enum Group
+{
+    partner, rival
+}
 public class BattleSystem : MonoBehaviour
 {
     enum Turn
@@ -77,14 +80,20 @@ public class BattleSystem : MonoBehaviour
                 // 動かすAnimationでTurnCheck()を呼び出す
                 // Player.Action();
 
-                enemy.DamegeCheck(my.Attack());//仮　消す予定
+                //enemy.DamegeCheck(my.Attack());//仮　消す予定
+                my.Attack();
+
+                turnType = Turn.Other;
                 break;
             case Turn.EnemyActionTurn:
                 Debug.Log("EnemyActionTurn");
                 // 動かすAnimationでTurnCheck()を呼び出す
                 // Enemy.Action();
 
-                my.DamegeCheck(enemy.Attack());//仮　消す予定
+                //my.DamegeCheck(enemy.Attack());//仮　消す予定
+                enemy.Attack();
+
+                turnType = Turn.Other;
                 break;
         // その他
             case Turn.Other:
@@ -106,7 +115,7 @@ public class BattleSystem : MonoBehaviour
     /// <param name="actionChara"></param>
     public void TurnCheck(int actionChara)
     {
-        if (actionChara == 0)
+        if (actionChara == (int)Group.partner)
         {
             if (playerFast)
             { turnType = Turn.EnemyActionTurn; }
@@ -122,4 +131,16 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void AttackCheck(int actionChara, int sTR)
+    {
+        if (actionChara == (int)Group.partner)
+        {
+            enemy.DamegeCheck(sTR);
+        }
+        else
+        {
+            my.DamegeCheck(sTR);
+        }
+
+    }
 }

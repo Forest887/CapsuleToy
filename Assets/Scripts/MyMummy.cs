@@ -16,12 +16,21 @@ public class MyMummy : MonoBehaviour
     //    this.aGI = aGI;
     //}
 
+    Rigidbody rb;
+    int speed = 2;
+    Animator anim;
     [SerializeField] GameObject battleSystemObj = null;
     BattleSystem battleSystem;
+    bool attackAct = false;
+
+    Vector3 defaultPosition;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
         battleSystem = battleSystemObj.GetComponent<BattleSystem>();
+        defaultPosition = this.transform.position;
     }
 
 
@@ -31,11 +40,17 @@ public class MyMummy : MonoBehaviour
         {
             Down();
         }
+
+        if (attackAct)
+        {
+            AttackAction();
+        }
         
     }
 
     public int Attack()
     {
+        attackAct = true;
         return sTR;
     }
 
@@ -43,12 +58,45 @@ public class MyMummy : MonoBehaviour
     {
         Debug.Log(damege);
         hP -= damege;
-        battleSystem.TurnCheck(1);
-
+        anim.Play("Damege");
+        rb.AddForce(transform.forward * -3, ForceMode.Impulse);
     }
 
     void Down()
     {
         Destroy(this.gameObject);
+    }
+
+    void AttackAction()
+    {
+        Vector3 heading = new Vector3(0, 0, 1.5f) - this.transform.position;
+
+        float dist = heading.magnitude;
+
+        Vector3 direction = heading / dist;
+        transform.forward = direction;
+
+        if (dist > 0.1f)
+        {
+            rb.velocity = direction * speed;
+        }
+        else
+        {
+            anim.Play("MummyAttack 1");
+            attackAct = false;
+        }
+    }
+
+    public void AttackEnd()
+    {
+        this.transform.position = defaultPosition;
+        battleSystem.AttackCheck((int)Group.partner, sTR);
+        //battleSystem.TurnCheck((int)Group.partner);
+    }
+
+    public void PositionReset()
+    {
+        this.transform.position = defaultPosition;
+        battleSystem.TurnCheck((int)Group.rival);
     }
 }

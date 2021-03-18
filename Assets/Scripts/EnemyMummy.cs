@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyMummy : MonoBehaviour
 {
     //string nAME = "Mummy";
@@ -16,14 +17,20 @@ public class EnemyMummy : MonoBehaviour
     //    this.aGI = aGI;
     //}
 
+    Rigidbody rb;
+    int speed = 2;
     Animator anim;
     [SerializeField] GameObject battleSystemObj = null;
     BattleSystem battleSystem;
+    bool attackAct = false;
 
+    Vector3 defaultPosition;
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         battleSystem = battleSystemObj.GetComponent<BattleSystem>();
+        defaultPosition = this.transform.position;
     }
 
 
@@ -34,11 +41,15 @@ public class EnemyMummy : MonoBehaviour
             Down();
         }
 
+        if (attackAct)
+        {
+            AttackAction();
+        }
     }
 
     public int Attack()
     {
-        anim.Play("MummyAttack");
+        attackAct = true;
         return sTR;
     }
 
@@ -46,11 +57,43 @@ public class EnemyMummy : MonoBehaviour
     {
         Debug.Log(damege);
         hP -= damege;
-        battleSystem.TurnCheck(0);
+        anim.Play("Damege");
+        rb.AddForce(transform.forward * -3, ForceMode.Impulse);
     }
 
     void Down()
     {
         Destroy(this.gameObject);
+    }
+    void AttackAction()
+    {
+        Vector3 heading = new Vector3(0, 0, -1.5f) - this.transform.position;
+
+        float dist = heading.magnitude;
+
+        Vector3 direction = heading / dist;
+        transform.forward = direction;
+
+        if (dist > 0.1f)
+        {
+            rb.velocity = direction * speed;
+        }
+        else
+        {
+            anim.Play("MummyAttack 1");
+            attackAct = false;
+        }
+    }
+
+    public void AttackEnd()
+    {
+        this.transform.position = defaultPosition;
+        battleSystem.AttackCheck((int)Group.rival, sTR);
+        //battleSystem.TurnCheck((int)Group.rival);
+    }
+    public void PositionReset()
+    {
+        this.transform.position = defaultPosition;
+        battleSystem.TurnCheck((int)Group.partner);
     }
 }
