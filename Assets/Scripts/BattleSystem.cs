@@ -9,32 +9,57 @@ public class BattleSystem : MonoBehaviour
     {
         PlanTurn, EnemyPlanTurn, Ordering, ActionTurn, EnemyActionTurn, Other
     }
-    Turn turnType = Turn.Other;
+    Turn turnType = Turn.PlanTurn;
 
     [SerializeField] GameObject attackButton = null;
+    [SerializeField] GameObject player = null;
+    MyMummy my;
+    [SerializeField] GameObject enemyMummy = null;
+    EnemyMummy enemy;
 
     int attackNum = 0;
     bool playerFast = true;
 
     void Start()
     {
-        
+        my = player.GetComponent<MyMummy>();
+        enemy = enemyMummy.GetComponent<EnemyMummy>();
     }
-
+    /// <summary>
+    /// 後で消します
+    /// </summary>
+    public void Tatakau()
+    {
+        turnType = Turn.EnemyPlanTurn;
+    }
 
     void Update()
     {
+        if (player && enemyMummy)
+        {
+
+        }
+        else
+        {
+            Debug.Log("終了");
+            return;
+        }
         switch (turnType)
         {
         // 行動を決める
             case Turn.PlanTurn:
+                //Debug.Log("PlanTurn");
                 attackButton.SetActive(true);
                 break;
             case Turn.EnemyPlanTurn:
+                Debug.Log("EnemyPlanTurn");
                 // Enemy.Plan();
+
+                turnType = Turn.Ordering;//仮　消す予定
                 break;
         // 順番決め
             case Turn.Ordering:
+                Debug.Log("Ordering");
                 // 速さで順番を決める
                 // if (player.speed > enemy.speed)
                 // { playerFast = true; }
@@ -48,12 +73,18 @@ public class BattleSystem : MonoBehaviour
                 break;
         // 行動する
             case Turn.ActionTurn:
-                // 動かすAnimationでChack()を呼び出す
+                Debug.Log("ActionTurn");
+                // 動かすAnimationでTurnCheck()を呼び出す
                 // Player.Action();
+
+                enemy.DamegeCheck(my.Attack());//仮　消す予定
                 break;
             case Turn.EnemyActionTurn:
-                // 動かすAnimationでChack()を呼び出す
+                Debug.Log("EnemyActionTurn");
+                // 動かすAnimationでTurnCheck()を呼び出す
                 // Enemy.Action();
+
+                my.DamegeCheck(enemy.Attack());//仮　消す予定
                 break;
         // その他
             case Turn.Other:
@@ -69,22 +100,26 @@ public class BattleSystem : MonoBehaviour
         attackNum = num;
     }
 
-    public void Chack(int actionChara)
+    /// <summary>
+    /// 先に誰が行動しているかによって次の行動を決める
+    /// </summary>
+    /// <param name="actionChara"></param>
+    public void TurnCheck(int actionChara)
     {
-        // 呼び出し元が自キャラの時
         if (actionChara == 0)
         {
             if (playerFast)
-                turnType = Turn.EnemyActionTurn;
+            { turnType = Turn.EnemyActionTurn; }
             else
-                turnType = Turn.PlanTurn;
+            { turnType = Turn.PlanTurn; }
         }
         else
         {
             if (!playerFast)
-                turnType = Turn.ActionTurn;
+            { turnType = Turn.ActionTurn; }
             else
-                turnType = Turn.PlanTurn;
+            { turnType = Turn.PlanTurn; }
         }
     }
+
 }
