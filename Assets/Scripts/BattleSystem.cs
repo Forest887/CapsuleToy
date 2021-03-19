@@ -14,6 +14,8 @@ public class BattleSystem : MonoBehaviour
     }
     Turn turnType = Turn.PlanTurn;
 
+    [SerializeField] GameObject cameraController = null;
+    BattleCameraController bcc;
     [SerializeField] GameObject attackButton = null;
     [SerializeField] GameObject player = null;
     MyMummy my;
@@ -25,6 +27,7 @@ public class BattleSystem : MonoBehaviour
 
     void Start()
     {
+        bcc = cameraController.GetComponent<BattleCameraController>();
         my = player.GetComponent<MyMummy>();
         enemy = enemyMummy.GetComponent<EnemyMummy>();
     }
@@ -53,6 +56,7 @@ public class BattleSystem : MonoBehaviour
             case Turn.PlanTurn:
                 //Debug.Log("PlanTurn");
                 attackButton.SetActive(true);
+                bcc.CameraChange(0);
                 break;
             case Turn.EnemyPlanTurn:
                 Debug.Log("EnemyPlanTurn");
@@ -82,6 +86,7 @@ public class BattleSystem : MonoBehaviour
 
                 //enemy.DamegeCheck(my.Attack());//仮　消す予定
                 my.Attack();
+                bcc.CameraChange(1);
 
                 turnType = Turn.Other;
                 break;
@@ -92,6 +97,7 @@ public class BattleSystem : MonoBehaviour
 
                 //my.DamegeCheck(enemy.Attack());//仮　消す予定
                 enemy.Attack();
+                bcc.CameraChange(2);
 
                 turnType = Turn.Other;
                 break;
