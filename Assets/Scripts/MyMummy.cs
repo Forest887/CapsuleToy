@@ -5,8 +5,8 @@ using UnityEngine;
 public class MyMummy : MonoBehaviour
 {
     //string nAME = "Mummy";
-    int hP = 50;
-    int sTR = 10;
+    [SerializeField] int hP = 50;
+    [SerializeField] int sTR = 10;
     //int aGI = 15;
 
     //public MyMummy(int hP,int sTR, int aGI)
