@@ -33,7 +33,8 @@ public class Partner : MonoBehaviour
 
         if (dist > 6)
         {
-
+            // 瞬間移動したい
+            rb.velocity = direction * speed;
         }
         else if (dist > 2)
         {

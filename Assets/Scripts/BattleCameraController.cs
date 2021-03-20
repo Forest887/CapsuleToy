@@ -52,7 +52,7 @@ public class BattleCameraController : MonoBehaviour
         {
             _position += 0.001f;
             _dolly.m_PathPosition = _position;
-            if (_fov < 60)
+            if (_fov < 75)
             {
                 _fov += 0.2f;
                 _virtualCameraRotate.m_Lens.FieldOfView = _fov;
@@ -66,7 +66,7 @@ public class BattleCameraController : MonoBehaviour
                 move = true;
                 timer = 0;
             }
-            if (_fov > 40)
+            if (_fov > 60)
             {
                 _fov -= 0.2f;
                 _virtualCameraRotate.m_Lens.FieldOfView = _fov;

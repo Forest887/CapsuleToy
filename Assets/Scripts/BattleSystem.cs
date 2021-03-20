@@ -40,12 +40,8 @@ public class BattleSystem : MonoBehaviour
     }
 
     void Update()
-    {
-        if (player && enemyMummy)
-        {
-
-        }
-        else
+    {   
+        if (!player || !enemyMummy)
         {
             Debug.Log("終了");
             return;
@@ -84,7 +80,6 @@ public class BattleSystem : MonoBehaviour
                 // 動かすAnimationでTurnCheck()を呼び出す
                 // Player.Action();
 
-                //enemy.DamegeCheck(my.Attack());//仮　消す予定
                 my.Attack();
                 bcc.CameraChange(1);
 
@@ -95,7 +90,6 @@ public class BattleSystem : MonoBehaviour
                 // 動かすAnimationでTurnCheck()を呼び出す
                 // Enemy.Action();
 
-                //my.DamegeCheck(enemy.Attack());//仮　消す予定
                 enemy.Attack();
                 bcc.CameraChange(2);
 
@@ -123,6 +117,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (actionChara == (int)Group.partner)
         {
+            my.AttackEnd(); 
             if (playerFast)
             { turnType = Turn.EnemyActionTurn; }
             else
@@ -130,6 +125,7 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
+            enemy.AttackEnd();
             if (!playerFast)
             { turnType = Turn.ActionTurn; }
             else
@@ -149,4 +145,5 @@ public class BattleSystem : MonoBehaviour
         }
 
     }
+
 }

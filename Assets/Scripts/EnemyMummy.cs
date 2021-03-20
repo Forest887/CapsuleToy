@@ -85,15 +85,25 @@ public class EnemyMummy : MonoBehaviour
         }
     }
 
-    public void AttackEnd()
+    public void AttackTrigger()
     {
-        this.transform.position = defaultPosition;
         battleSystem.AttackCheck((int)Group.rival, sTR);
         //battleSystem.TurnCheck((int)Group.rival);
     }
+
+    public void AttackEnd()
+    {
+        this.transform.position = defaultPosition;
+    }
+
     public void PositionReset()
     {
         this.transform.position = defaultPosition;
         battleSystem.TurnCheck((int)Group.partner);
     }
+
+    //public void CameraChange()
+    //{
+    //    battleSystem.CameraChange(2);
+    //}
 }

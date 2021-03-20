@@ -87,11 +87,15 @@ public class MyMummy : MonoBehaviour
         }
     }
 
+    public void AttackTrigger()
+    {
+        battleSystem.AttackCheck((int)Group.partner, sTR);
+        //battleSystem.TurnCheck((int)Group.partner);
+    }
+
     public void AttackEnd()
     {
         this.transform.position = defaultPosition;
-        battleSystem.AttackCheck((int)Group.partner, sTR);
-        //battleSystem.TurnCheck((int)Group.partner);
     }
 
     public void PositionReset()
@@ -99,4 +103,9 @@ public class MyMummy : MonoBehaviour
         this.transform.position = defaultPosition;
         battleSystem.TurnCheck((int)Group.rival);
     }
+
+    //public void CameraChange()
+    //{
+    //    battleSystem.CameraChange(1);
+    //}
 }
