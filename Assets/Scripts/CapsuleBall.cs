@@ -39,7 +39,7 @@ public class CapsuleBall : MonoBehaviour
     {
         if (collision.gameObject.tag == "ground")
         {
-            rBody.AddForce(Vector3.up * 2.5f, ForceMode.Impulse);
+            rBody.AddForce(Vector3.up * 2.0f, ForceMode.Impulse);
         }
     }
 

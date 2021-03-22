@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Material[] defaultMaterial = null;
     [SerializeField] Material[] hideMaterial = null;
 
-    [SerializeField] float speed = 3;
+    [SerializeField] float speed = 1.5f;
     float defaultSpeed;
-    [SerializeField] int turnSpeed = 3;
-    [SerializeField] int throwPower = 8;
+    [SerializeField] int turnSpeed = 9;
+    [SerializeField] int throwPower = 6;
 
     [SerializeField] GameObject capsule = null;
     [SerializeField] GameObject throwPoint = null;
@@ -64,10 +64,10 @@ public class PlayerController : MonoBehaviour
             ThrowACapsule();
         }
 
-        if (Input.GetButtonDown("Hide"))
-        {
-            Hide();
-        }
+        //if (Input.GetButtonDown("Hide"))
+        //{
+        //    Hide();
+        //}
 
     }
 
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         // 生成
         GameObject ball = Instantiate(capsule, throwPoint.transform.position, Quaternion.identity);
         Rigidbody ballRb = ball.GetComponent<Rigidbody>();
-        ballRb.AddForce(transform.forward * throwPower, ForceMode.Impulse);
+        ballRb.AddForce((transform.forward + new Vector3(0, 0.4f, 0)) * throwPower, ForceMode.Impulse);
     }
 
     void Hide()
