@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
     Animator anim;
-    [SerializeField] GameObject player = null;
     [SerializeField] Material[] defaultMaterial = null;
     [SerializeField] Material[] hideMaterial = null;
 
@@ -27,7 +26,8 @@ public class PlayerController : MonoBehaviour
     // 前回ボタンが押された時点と現在時間との差分を格納
     TimeSpan pastTime;
 
-    public Vector3 velo = Vector3.zero;
+    Vector3 velo = Vector3.zero;
+    public float veloM = 0;
     float x = 0;
     float z = 0;
     void Start()
@@ -44,7 +44,8 @@ public class PlayerController : MonoBehaviour
         z = Input.GetAxisRaw("Vertical");
 
         velo = rb.velocity;
-        anim.SetFloat("Run", velo.magnitude);
+        veloM = velo.magnitude;
+        anim.SetFloat("Run", veloM);
 
         if (Input.GetButtonDown("Run"))
         {
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
         if (velo.magnitude <= 1.6f)
         {
             // Materialを変えるときは一度レンダラーだけを取り出してから変える
-            Renderer renderer = player.GetComponent<Renderer>();
+            Renderer renderer = GetComponent<Renderer>();
             // Materialが複数の時は一度配列で取得して、配列としてセットし直す
             Material[] materials = renderer.materials;
             if (hide)

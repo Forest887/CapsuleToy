@@ -40,37 +40,42 @@ public class Enemy : MonoBehaviour
             rb.velocity = direction * speed;
         }
     }
-
-    private void OnTriggerStay(Collider other)
+    public void Search(GameObject player)
     {
-        //https://gametukurikata.com/program/onlyforwardsearch
-        if (other.tag =="Player")
-        {
-            PlayerController controller = other.gameObject.GetComponent<PlayerController>();
-            if (controller.hide)
-            {
-                //　主人公の方向
-                var playerDireciton = other.transform.position - this.transform.position;
-                //　敵の前方からの主人公の方向
-                var angle = Vector3.Angle(transform.forward, playerDireciton);
-                //　サーチする角度内だったら発見
-                if (angle <= searchAngle)
-                {
-                    player = other.gameObject;
-                }
-            }
-            else if(controller.velo != Vector3.zero)
-            {
-                player = other.gameObject;
-            }
-        }
+        this.player = player;
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            player = null;
-        }
-    }
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    //https://gametukurikata.com/program/onlyforwardsearch
+    //    // 視野
+    //    if (other.tag =="Player")
+    //    {
+    //        PlayerController controller = other.gameObject.GetComponent<PlayerController>();
+    //        if (!controller.hide)
+    //        {
+    //            //　主人公の方向
+    //            var playerDireciton = other.transform.position - this.transform.position;
+    //            //　敵の前方からの主人公の方向
+    //            var angle = Vector3.Angle(transform.forward, playerDireciton);
+    //            //　サーチする角度内だったら発見
+    //            if (angle <= searchAngle)
+    //            {
+    //                player = other.gameObject;
+    //            }
+    //        }
+    //        else if(controller.veloM >= 2)
+    //        {
+    //            player = other.gameObject;
+    //        }
+    //    }
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        player = null;
+    //    }
+    //}
 }

@@ -146,4 +146,8 @@ public class BattleSystem : MonoBehaviour
 
     }
 
+    public void EnemySet(GameObject enemy)
+    {
+        enemyMummy = enemy;
+    }
 }

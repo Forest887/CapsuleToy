@@ -84,8 +84,8 @@ public class BattleCameraController : MonoBehaviour
         _position = 0;
         _dolly.m_PathPosition = 0;
         timer = 0;
-        _fov = 40;
-        _virtualCameraRotate.m_Lens.FieldOfView = 40;
+        _fov = 60;
+        _virtualCameraRotate.m_Lens.FieldOfView = 60;
         move = false;
     }
 

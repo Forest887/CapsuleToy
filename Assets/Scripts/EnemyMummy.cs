@@ -20,7 +20,7 @@ public class EnemyMummy : MonoBehaviour
     Rigidbody rb;
     int speed = 2;
     Animator anim;
-    [SerializeField] GameObject battleSystemObj = null;
+    GameObject battleSystemObj = null;
     BattleSystem battleSystem;
     bool attackAct = false;
 
@@ -29,6 +29,7 @@ public class EnemyMummy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        battleSystemObj = GameObject.Find("BattleSystem");
         battleSystem = battleSystemObj.GetComponent<BattleSystem>();
         defaultPosition = this.transform.position;
     }
