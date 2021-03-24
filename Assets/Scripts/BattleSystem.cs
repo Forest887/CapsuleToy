@@ -22,6 +22,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] GameObject enemyMummy = null;
     EnemyMummy enemy;
 
+    public GameObject ene = null;
+    public GameObject myP = null;
+
     int attackNum = 0;
     bool playerFast = true;
 
@@ -31,8 +34,9 @@ public class BattleSystem : MonoBehaviour
         my = player.GetComponent<MyMummy>();
         enemy = enemyMummy.GetComponent<EnemyMummy>();
     }
+
     /// <summary>
-    /// 後で消します
+    /// 後で消します bottunで操作
     /// </summary>
     public void Tatakau()
     {

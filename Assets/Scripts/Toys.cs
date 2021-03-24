@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Toys : MonoBehaviour
 {
+    int HP;
+    int MP;
+    int ATK;
+    int DEF;
+    int AGI;
 
     void Start()
     {

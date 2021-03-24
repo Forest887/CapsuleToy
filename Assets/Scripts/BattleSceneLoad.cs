@@ -5,21 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class BattleSceneLoad : MonoBehaviour
 {
-    [SerializeField] GameObject enemy = null;
+    GameObject manager;
+    GameManager gameManager;
+
+    private void Start()
+    {
+        manager = GameObject.Find("GameManager");
+        gameManager = manager.GetComponent<GameManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "enemy")
         {
-            //SceneManager.sceneLoaded -= BattleSceneLoaded;
+            gameManager.enemy = other.gameObject;
             SceneManager.LoadScene("Battle");
         }
     }
-    //private void BattleSceneLoaded(Scene next, LoadSceneMode mode)
-    //{
-    //    GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-    //    //gameManager.enemyNum = 1;
-
-    //    SceneManager.sceneLoaded -= BattleSceneLoaded;
-    //}
 }

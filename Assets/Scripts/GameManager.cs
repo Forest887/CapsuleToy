@@ -1,23 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] enemys = null;
-    [SerializeField] GameObject enemyZone = null;
-    [SerializeField] GameObject playerZone = null;
+    static bool m_isExists = false;
 
-    GameObject enemy = null;
-    int num = 10;
+    //[SerializeField] GameObject[] enemys = null;
+
+    public GameObject enemy = null;
+
+    bool battleScene = false;
+
+    void Awake()
+    {
+        if (m_isExists)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            m_isExists = true;
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        SceneManager.activeSceneChanged += ActiveSceneChanged;
+
+        if (SceneManager.GetActiveScene().name == "Battle")
+        { battleScene = true; }
+        else
+        { battleScene = false; }
+        Debug.Log(battleScene);
+    }
     void Start()
     {
-        Debug.Log(num);
-        if (num <= enemys.Length)
-        {
-            enemy = Instantiate(enemys[num - 1], enemyZone.transform);
-
-        }
     }
 
+    void ActiveSceneChanged(Scene thisScene, Scene nextScene)
+    {
+        if (SceneManager.GetActiveScene().name == "Battle")
+        { battleScene = true; }
+        else
+        { battleScene = false; }
+        Debug.Log(battleScene);
+    }
 }
