@@ -2,28 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime : MonoBehaviour
+public class Slime : Toys
 {
-    string name;
-    int HP;
-    int MP;
-    int ATK;
-    int DEF;
-    int AGI;
 
-    void Start()
-    {
-        
-    }
 
 
     void Update()
     {
-        
-    }
-
-    void Attack()
-    {
-
+        base.UPDATE();
     }
 }
