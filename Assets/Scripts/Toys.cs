@@ -8,19 +8,22 @@ public class Toys : MonoBehaviour
     Vector3 startPosition;
     Vector3 setPosition;
 
-    int moveSpeed = 2;
-    int turnSpeed = 6;
     float timer = 0f;
     int moveTimer = 6;
     bool move = false;
+    bool gohome = false;
 
-    GameObject player = null;
-    float searchAngle = 110f;
     enum State
     {
-        normal, tracking
+        normal, tracking, goHome
     }
     State state = State.normal;
+
+    //キャラごとに変えたい
+    int moveSpeed = 2;
+    int turnSpeed = 6;
+
+    float searchAngle = 110f;
 
     void Start()
     {
@@ -28,21 +31,28 @@ public class Toys : MonoBehaviour
         startPosition = this.transform.position;
     }
 
-    public void UPDATE()
+    void Update()
     {
         switch (state)
         {
             case State.normal:
-                DefaultAction();
+                NomalAction();
                 break;
             case State.tracking:
+                Move(setPosition);
+                break;
+            case State.goHome:
+                GoHome();
                 break;
             default:
                 break;
         }
     }
 
-    private void Move(Vector3 vector3)
+    /// <summary>
+    /// setPositionに向かって進む
+    /// </summary>
+    private void Move(Vector3 setPosition)
     {
         Vector3 heading = setPosition - this.transform.position;
         float dist = heading.magnitude;
@@ -63,7 +73,7 @@ public class Toys : MonoBehaviour
     /// <summary>
     /// 通常時の行動
     /// </summary>
-    public void DefaultAction()
+    public void NomalAction()
     {
         if (!move)
         {
@@ -82,6 +92,30 @@ public class Toys : MonoBehaviour
         }
     }
 
+    void GoHome()
+    {
+        if (!gohome)
+        {
+            timer = 0;
+            move = true;
+            setPosition = SetPosition(startPosition);
+            gohome = true;
+        }
+        else
+        {
+            if (timer < 3)
+            { timer += Time.deltaTime; }
+            else
+            { Move(setPosition); }
+        }
+        if (!move)
+        {
+            gohome = false;
+            timer = 0;
+            state = State.normal;
+        }
+    }
+
     /// <summary>
     /// 移動先を決める
     /// </summary>
@@ -93,7 +127,7 @@ public class Toys : MonoBehaviour
         float z = startPosition.z + Random.Range(-3f, 3f);
         return new Vector3(x, 0, z);
     }
-    public void OnTriggerStay(Collider other)
+    void OnTriggerStay(Collider other)
     {
         //https://gametukurikata.com/program/onlyforwardsearch
         // 視野
@@ -102,7 +136,8 @@ public class Toys : MonoBehaviour
             PlayerController controller = other.gameObject.GetComponent<PlayerController>();
             if (controller.veloM >= 1.9f)
             {
-                player = other.gameObject;
+                setPosition = other.gameObject.transform.position;
+                state = State.tracking;
             }
             else
             {
@@ -113,9 +148,17 @@ public class Toys : MonoBehaviour
                 //　サーチする角度内だったら発見
                 if (angle <= searchAngle)
                 {
-                    player = other.gameObject;
+                    setPosition = other.gameObject.transform.position;
+                    state = State.tracking;
                 }
             }
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            state = State.goHome;
         }
     }
 }

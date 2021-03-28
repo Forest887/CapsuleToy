@@ -7,8 +7,4 @@ public class Slime : Toys
 
 
 
-    void Update()
-    {
-        base.UPDATE();
-    }
 }
